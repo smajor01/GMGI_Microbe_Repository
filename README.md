@@ -65,11 +65,13 @@ DBSpec = OPTIONAL **USE THIS IF YOU WANT TO MAKE 100% ID WITH BACTERIA (ANOTHER 
 
 # Set your working directory, identify the location of the raw MiSeq data, and choose the database to reference that data.
 
-'<addr>' library(dada2)
-'<addr>' setwd("C:/Users/smajor/Box Sync/Experiments/bacterial_cultures")
-'<addr>' dataPath <- "C:/Users/smajor/Box Sync/Experiments/bacterial_cultures/rawdata/"
-'<addr>' database <- "C:/databases/rdp_train_set_16.fa.gz"
-'<addr>' DBspec <- "C:/databases/rdp_species_assignment_16.fa.gz" # USE THIS FOR 100% ID
+```R
+library(dada2)
+setwd("C:/Users/smajor/Box Sync/Experiments/bacterial_cultures")
+dataPath <- "C:/Users/smajor/Box Sync/Experiments/bacterial_cultures/rawdata/"
+database <- "C:/databases/rdp_train_set_16.fa.gz"
+DBspec <- "C:/databases/rdp_species_assignment_16.fa.gz" # USE THIS FOR 100% ID
+```
 # Source the location of the pipeline file.
 
 '<addr>' source("C:/Users/smajor/Box Sync/R-scripts/DADA-2 Pipeline.R")
