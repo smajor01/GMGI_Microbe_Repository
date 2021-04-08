@@ -50,37 +50,29 @@ The final output is meant to be merged with the "Repository Sequencing Data". Th
 Remove the "TAXA_TOTAL" field, it is a duplicate of "SAMPLE_TOTAL". 
 Add the date the cultures were identified/the code was executed.
 Add the database used to identify each culture.
-Samuel Major
--
-Aug 27, 2020, 8:06 AM EDT
-Example use of The Pipeline
-Samuel Major
--
-Aug 27, 2020, 8:12 AM EDT
-# Running dada2
-#
-# THIS IS A SIMPLE PIPELINE TO RUN DADA2 SEQUENCE ANALYSIS. 
-#
-# YOU WILL FIRST READ IN 2 MANDATORY FILES, AND 1 OPTIONAL
-#
-# # dataPath = MANDATORY*** PATH TO THE RAW DATA
-# # database = MANDATORY*** THE PATH TO THE DATA BASE TO CHOOSE TAXONOMY (SHOULD BE PROPERLY FORMATTED FOR DADA2)
-# # DBSpec = OPTIONAL*** USE THIS IF YOU WANT TO MAKE 100% ID WITH BACTERIA (ANOTHER DATABASE)
-#
-# YOU WILL THEN PROCEED TO RUN THE COMMANDS SEQUENTIALLY,
-# CHANGING ONLY THE HIGHLIGHTED PARAMETERS WITHIN THE FUNCTIONS.
 
-#####
+# Running dada2
+
+# THIS IS A SIMPLE PIPELINE TO RUN DADA2 SEQUENCE ANALYSIS. 
+
+# YOU WILL FIRST READ IN 2 MANDATORY FILES, AND 1 OPTIONAL
+
+dataPath = MANDATORY **PATH TO THE RAW DATA**
+database = MANDATORY **THE PATH TO THE DATA BASE TO CHOOSE TAXONOMY (SHOULD BE PROPERLY FORMATTED FOR DADA2)**
+DBSpec = OPTIONAL **USE THIS IF YOU WANT TO MAKE 100% ID WITH BACTERIA (ANOTHER DATABASE)**
+
+# YOU WILL THEN PROCEED TO RUN THE COMMANDS SEQUENTIALLY, CHANGING ONLY THE HIGHLIGHTED PARAMETERS WITHIN THE FUNCTIONS.
+
 # Set your working directory, identify the location of the raw MiSeq data, and choose the database to reference that data.
 
-library(dada2)
-setwd("C:/Users/smajor/Box Sync/Experiments/bacterial_cultures")
-dataPath <- "C:/Users/smajor/Box Sync/Experiments/bacterial_cultures/rawdata/"
-database <- "C:/databases/rdp_train_set_16.fa.gz"
-DBspec <- "C:/databases/rdp_species_assignment_16.fa.gz" # USE THIS FOR 100% ID
+'<addr>' library(dada2)
+'<addr>' setwd("C:/Users/smajor/Box Sync/Experiments/bacterial_cultures")
+'<addr>' dataPath <- "C:/Users/smajor/Box Sync/Experiments/bacterial_cultures/rawdata/"
+'<addr>' database <- "C:/databases/rdp_train_set_16.fa.gz"
+'<addr>' DBspec <- "C:/databases/rdp_species_assignment_16.fa.gz" # USE THIS FOR 100% ID
 # Source the location of the pipeline file.
 
-source("C:/Users/smajor/Box Sync/R-scripts/DADA-2 Pipeline.R")
+'<addr>' source("C:/Users/smajor/Box Sync/R-scripts/DADA-2 Pipeline.R")
 #####
 # Make Simple Quality Plots to determine where you should trim your Data
 
