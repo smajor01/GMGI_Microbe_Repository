@@ -53,17 +53,17 @@ Add the database used to identify each culture.
 
 # Running dada2
 
-# THIS IS A SIMPLE PIPELINE TO RUN DADA2 SEQUENCE ANALYSIS. 
+### THIS IS A SIMPLE PIPELINE TO RUN DADA2 SEQUENCE ANALYSIS. 
 
-# YOU WILL FIRST READ IN 2 MANDATORY FILES, AND 1 OPTIONAL
+### YOU WILL FIRST READ IN 2 MANDATORY FILES, AND 1 OPTIONAL
 
 dataPath = MANDATORY **PATH TO THE RAW DATA**
 database = MANDATORY **THE PATH TO THE DATA BASE TO CHOOSE TAXONOMY (SHOULD BE PROPERLY FORMATTED FOR DADA2)**
 DBSpec = OPTIONAL **USE THIS IF YOU WANT TO MAKE 100% ID WITH BACTERIA (ANOTHER DATABASE)**
 
-# YOU WILL THEN PROCEED TO RUN THE COMMANDS SEQUENTIALLY, CHANGING ONLY THE HIGHLIGHTED PARAMETERS WITHIN THE FUNCTIONS.
+### YOU WILL THEN PROCEED TO RUN THE COMMANDS SEQUENTIALLY, CHANGING ONLY THE HIGHLIGHTED PARAMETERS WITHIN THE FUNCTIONS.
 
-# Set your working directory, identify the location of the raw MiSeq data, and choose the database to reference that data.
+### Set your working directory, identify the location of the raw MiSeq data, and choose the database to reference that data.
 
 ```R
 library(dada2)
@@ -72,43 +72,47 @@ dataPath <- "C:/Users/smajor/Box Sync/Experiments/bacterial_cultures/rawdata/"
 database <- "C:/databases/rdp_train_set_16.fa.gz"
 DBspec <- "C:/databases/rdp_species_assignment_16.fa.gz" # USE THIS FOR 100% ID
 ```
-# Source the location of the pipeline file.
+### Source the location of the pipeline file.
 
-'<addr>' source("C:/Users/smajor/Box Sync/R-scripts/DADA-2 Pipeline.R")
-#####
-# Make Simple Quality Plots to determine where you should trim your Data
-
+```R
+source("C:/Users/smajor/Box Sync/R-scripts/DADA-2 Pipeline.R")
+```
+### Make Simple Quality Plots to determine where you should trim your Data
+```R
 DADA2qualplots(dataPath = dataPath)
-# Decide where to Trim based on these plots. These are very basic plots. Use the program FastQC for more robust QC analysis on the sequences.
+```
+Decide where to Trim based on these plots. These are very basic plots. Use the program FastQC for more robust QC analysis on the sequences.
 
-#####
-# Filter, Trim, Learn the Error rates, Merge, remove chimeras, and assign taxonomy with DADA2
-
+### Filter, Trim, Learn the Error rates, Merge, remove chimeras, and assign taxonomy with DADA2
+```R
 DADA2QfiltandTaxa(dataPath = dataPath
                   , FwrdStrtTrim = 10, FwrdEndTrim = 225
                   , RevStrtTrim = 10, RevEndTrim = 225
                   , errorRates = F, database = database) # ADD database = DBspec to add 100% identification to species
-# If any samples are completely removed during filtering and trimming, you will have to remove those samples that failed from the dataPath location and run this code again.
+```
+If any samples are completely removed during filtering and trimming, you will have to remove those samples that failed from the dataPath location and run this code again.
 
-#####
-# Build the phylogenetic tree
+## Build the phylogenetic tree
 
-# Non-rooted neighbor-joining tree with ClustalW
-
+### Non-rooted neighbor-joining tree with ClustalW
+```R
 phylotree_NJ(seqtab.nochim = seqtab.nochim)
+```
 OR
 
-# Rooted UPGMA method with ClustalW. This is best to use to see consistent relationships; otherwise, non-rooted trees will have the root randomly chosen when doing phylogenetic analyses with phyloseq.
-
+### Rooted UPGMA method with ClustalW. This is best to use to see consistent relationships; otherwise, non-rooted trees will have the root randomly chosen when doing phylogenetic analyses with phyloseq.
+```R
 phylotree_UPGMA(seqtab.nochim = seqtab.nochim)
-#####
+```
 
-# Build the phyloseq object based on the output from the previous commands.
-# The phyloseq object is a convenient way to explore the data in R.
+## Build the phyloseq object based on the output from the previous commands.
 
+### The phyloseq object is a convenient way to explore the data in R.
+```R
 bacterial.cultures <- buildPhyloseq(seqtab.nochim = seqtab.nochim, taxa = taxa, fitGTR = fitGTR.upgma)
-# OPTIONAL: Save the individual portions of the phyloseq object to maintain reproducibility
-
+```
+## OPTIONAL: Save the individual portions of the phyloseq object to maintain reproducibility
+```R
 taxa <- as.data.frame(tax_table(bacterial.cultures))
 otu <- as.data.frame(otu_table(bacterial.cultures))
 tree <- phy_tree(bacterial.cultures)
@@ -118,10 +122,13 @@ write.csv(taxa, "C:/Users/smajor/Box Sync/Experiments/bacterial_cultures/bacteri
 write.csv(otu, "C:/Users/smajor/Box Sync/Experiments/bacterial_cultures/bacterial_cultures-otu.csv")
 write.tree(tree, "C:/Users/smajor/Box Sync/Experiments/bacterial_cultures/bacterial_cultures-tree.tre")
 write.csv(seqs,"C:/Users/smajor/Box Sync/Experiments/bacterial_cultures/bacterial_cultures-seqs.csv")
-# Better to write the sequences as a fasta
+```
+Better to write the sequences as a fasta
+```R
 Biostrings::writeXStringSet(refseq(bacterial.cultures),"C:/Users/smajor/Box Sync/Experiments/bacterial_cultures/bacterial_cultures-seq.fasta",  format = "fasta") 
-
-# Load the files back into R to create the phyloseq object, if required
+```
+Load the files back into R to create the phyloseq object, if required
+```R
 source("C:/Users/smajor/Box Sync/Science/SOPs and Protocols/Microbe/CODES for MiSeq Data Analysis/phySeq_Object_loading.R")
 
 taxa <- "C:/Users/smajor/Box Sync/Experiments/bacterial_cultures/bacterial_cultures-taxa.csv"
@@ -130,12 +137,13 @@ tree <- "C:/Users/smajor/Box Sync/Experiments/bacterial_cultures/bacterial_cultu
 seq <- "C:/Users/smajor/Box Sync/Experiments/bacterial_cultures/bacterial_cultures-seq.fasta""
 
 bacterial.cultures <- load_Phyles(taxa, otu, tree, seq)
-#####
+```
 
 # Identify each individual culture down to the genus level and provide some basic statistics on the representative sequence as well as the most abundant sequence. This is the command that ultimately generates the data fro the "Repository Sequencing Data"
-
+```R
 source("C:/Users/smajor/Box Sync/Science/SOPs and Protocols/Microbe/CODES for MiSeq Data Analysis/SampleID-6.R")
 bacterial.cultures.genus <- cultureID.2(bacterial.cultures, "Genus")
+```
 # Write the object to a csv file.
 
 write.csv(file = "C:/Users/smajor/Box Sync/Experiments/bacterial_cultures/bacterial_cultures-genus.csv", bacterial.cultures.genus)
